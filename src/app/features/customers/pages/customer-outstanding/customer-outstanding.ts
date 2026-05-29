@@ -338,6 +338,18 @@ export class CustomerOutstanding implements AfterViewInit {
     return key ? this.findDistrict(key) : null;
   });
 
+  protected readonly filteredTotalInvoices = computed(() =>
+    this.filteredGroups().reduce(
+      (sum, group) =>
+        sum + group.customers.reduce((groupSum, customer) => groupSum + customer.count, 0),
+      0,
+    ),
+  );
+
+  protected readonly filteredTotalOutstanding = computed(() =>
+    this.filteredGroups().reduce((sum, group) => sum + group.visibleTotal, 0),
+  );
+
   constructor(private readonly ngZone: NgZone) {}
 
   ngAfterViewInit(): void {

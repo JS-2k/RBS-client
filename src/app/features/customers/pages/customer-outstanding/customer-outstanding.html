@@ -23,7 +23,7 @@
 
   <section class="grid min-h-0 flex-1 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm xl:grid-cols-[1fr_400px]">
     <div class="relative min-h-0 bg-slate-50">
-      <div class="absolute left-3 top-3 z-10 rounded-lg border border-slate-200 bg-white px-3 py-2 shadow-sm">
+      <div class="absolute bottom-3 right-3 z-10 max-w-[320px] rounded-lg border border-slate-200 bg-white px-3 py-2 shadow-sm">
         @if (selectedGroup(); as group) {
           <p class="text-xs text-slate-500">Selected district</p>
           <p class="text-sm font-semibold text-slate-950">
@@ -34,7 +34,7 @@
         }
       </div>
 
-      <div #mapWrap class="relative flex h-full min-h-0 items-center justify-center p-4 pt-16">
+      <div #mapWrap class="relative flex h-full min-h-0 items-center justify-center p-4">
         @if (mapStatus() === 'loading') {
           <div class="absolute z-10 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-500 shadow-sm">
             Loading Tamil Nadu map...
@@ -196,9 +196,11 @@
       </div>
 
       <div class="grid shrink-0 grid-cols-[1fr_54px_86px] border-t-2 border-slate-200 bg-slate-50 px-3 py-3">
-        <span class="text-sm font-bold text-slate-950">Total</span>
-        <span class="text-right text-sm font-bold text-slate-950">{{ totalInvoices }}</span>
-        <span class="text-right text-sm font-bold text-slate-950">{{ fmt(totalOutstanding) }}</span>
+        <span class="text-sm font-bold text-slate-950">Visible total</span>
+        <span class="text-right text-sm font-bold text-slate-950">{{ filteredTotalInvoices() }}</span>
+        <span class="text-right text-sm font-bold text-slate-950">
+          {{ fmt(filteredTotalOutstanding()) }}
+        </span>
       </div>
     </aside>
   </section>

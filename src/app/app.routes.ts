@@ -30,6 +30,7 @@ export const routes: Routes = [
         data: {
           title: 'Customers',
           description: 'Manage customer profiles, contact details, and account status.',
+          showStats: false,
         },
       },
       {
@@ -42,13 +43,9 @@ export const routes: Routes = [
       {
         path: 'invoices',
         loadComponent: () =>
-          import('./features/workspace/pages/menu-page/menu-page').then(
-            (component) => component.MenuPage,
+          import('./features/invoices/pages/invoice-create/invoice-create').then(
+            (component) => component.InvoiceCreate,
           ),
-        data: {
-          title: 'Invoices',
-          description: 'Create, track, and review billing documents.',
-        },
       },
       {
         path: 'quotations',

@@ -1,0 +1,246 @@
+<div class="invoice-workspace mx-auto grid max-w-7xl gap-4 xl:grid-cols-[420px_1fr]">
+  <section class="invoice-editor rounded-lg border border-slate-200 bg-white shadow-sm">
+    <div class="border-b border-slate-200 px-4 py-3">
+      <p class="text-xs font-semibold uppercase tracking-[0.16em] text-sky-700">Invoice</p>
+      <h1 class="text-xl font-semibold text-slate-950">Create invoice</h1>
+    </div>
+
+    <div class="max-h-[calc(100vh-12rem)] space-y-4 overflow-y-auto p-4">
+      <div class="grid gap-3 sm:grid-cols-2">
+        <label class="field">
+          <span>GSTIN</span>
+          <input [value]="invoice().gstin" (input)="updateInvoice('gstin', $any($event.target).value)" />
+        </label>
+        <label class="field">
+          <span>Phone</span>
+          <input [value]="invoice().phone" (input)="updateInvoice('phone', $any($event.target).value)" />
+        </label>
+      </div>
+
+      <label class="field">
+        <span>Company name</span>
+        <input [value]="invoice().companyName" (input)="updateInvoice('companyName', $any($event.target).value)" />
+      </label>
+
+      <label class="field">
+        <span>Company address</span>
+        <textarea rows="2" [value]="invoice().address" (input)="updateInvoice('address', $any($event.target).value)"></textarea>
+      </label>
+
+      <label class="field">
+        <span>Bill to</span>
+        <textarea rows="3" [value]="invoice().billTo" (input)="updateInvoice('billTo', $any($event.target).value)"></textarea>
+      </label>
+
+      <div class="grid gap-3 sm:grid-cols-2">
+        <label class="field">
+          <span>Invoice no.</span>
+          <input [value]="invoice().invoiceNo" (input)="updateInvoice('invoiceNo', $any($event.target).value)" />
+        </label>
+        <label class="field">
+          <span>Invoice date</span>
+          <input type="date" [value]="invoice().invoiceDate" (input)="updateInvoice('invoiceDate', $any($event.target).value)" />
+        </label>
+        <label class="field">
+          <span>Order no.</span>
+          <input [value]="invoice().orderNo" (input)="updateInvoice('orderNo', $any($event.target).value)" />
+        </label>
+        <label class="field">
+          <span>Order date</span>
+          <input type="date" [value]="invoice().orderDate" (input)="updateInvoice('orderDate', $any($event.target).value)" />
+        </label>
+        <label class="field">
+          <span>Way bill no.</span>
+          <input [value]="invoice().wayBillNo" (input)="updateInvoice('wayBillNo', $any($event.target).value)" />
+        </label>
+        <label class="field">
+          <span>Way bill date</span>
+          <input type="date" [value]="invoice().wayBillDate" (input)="updateInvoice('wayBillDate', $any($event.target).value)" />
+        </label>
+        <label class="field">
+          <span>Truck no.</span>
+          <input [value]="invoice().truckNo" (input)="updateInvoice('truckNo', $any($event.target).value)" />
+        </label>
+        <label class="field">
+          <span>Transport</span>
+          <input [value]="invoice().transport" (input)="updateInvoice('transport', $any($event.target).value)" />
+        </label>
+      </div>
+
+      <div class="rounded-lg border border-slate-200">
+        <div class="flex items-center justify-between border-b border-slate-200 px-3 py-2">
+          <h2 class="text-sm font-semibold text-slate-950">Products</h2>
+          <button type="button" class="small-button" (click)="addItem()">Add item</button>
+        </div>
+        <div class="space-y-3 p-3">
+          @for (item of items(); track $index) {
+            <div class="rounded-md border border-slate-200 p-3">
+              <label class="field">
+                <span>Description</span>
+                <input [value]="item.description" (input)="updateItem($index, 'description', $any($event.target).value)" />
+              </label>
+              <div class="mt-3 grid grid-cols-[1fr_1fr_72px_auto] gap-2">
+                <label class="field">
+                  <span>Qty</span>
+                  <input type="number" [value]="item.quantity" (input)="updateItem($index, 'quantity', $any($event.target).value)" />
+                </label>
+                <label class="field">
+                  <span>Rate</span>
+                  <input type="number" [value]="item.rate" (input)="updateItem($index, 'rate', $any($event.target).value)" />
+                </label>
+                <label class="field">
+                  <span>Per</span>
+                  <input [value]="item.per" (input)="updateItem($index, 'per', $any($event.target).value)" />
+                </label>
+                <button type="button" class="mt-6 h-9 rounded-md border border-red-200 px-2 text-xs font-semibold text-red-600 hover:bg-red-50" (click)="removeItem($index)">Remove</button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="grid gap-3 sm:grid-cols-3">
+        <label class="field">
+          <span>CGST %</span>
+          <input type="number" [value]="invoice().cgstRate" (input)="updateNumber('cgstRate', $any($event.target).value)" />
+        </label>
+        <label class="field">
+          <span>SGST %</span>
+          <input type="number" [value]="invoice().sgstRate" (input)="updateNumber('sgstRate', $any($event.target).value)" />
+        </label>
+        <label class="field">
+          <span>Round off</span>
+          <input type="number" [value]="invoice().roundOff" (input)="updateNumber('roundOff', $any($event.target).value)" />
+        </label>
+      </div>
+
+      <div class="grid gap-3 sm:grid-cols-2">
+        <label class="field">
+          <span>Bank</span>
+          <input [value]="invoice().bankName" (input)="updateInvoice('bankName', $any($event.target).value)" />
+        </label>
+        <label class="field">
+          <span>A/c no.</span>
+          <input [value]="invoice().accountNo" (input)="updateInvoice('accountNo', $any($event.target).value)" />
+        </label>
+        <label class="field">
+          <span>IFSC</span>
+          <input [value]="invoice().ifscCode" (input)="updateInvoice('ifscCode', $any($event.target).value)" />
+        </label>
+        <label class="field">
+          <span>Branch</span>
+          <input [value]="invoice().branch" (input)="updateInvoice('branch', $any($event.target).value)" />
+        </label>
+      </div>
+    </div>
+
+    <div class="border-t border-slate-200 p-4">
+      <button type="button" class="h-10 w-full rounded-md bg-slate-950 text-sm font-semibold text-white hover:bg-slate-800" (click)="printInvoice()">
+        Print / Save PDF
+      </button>
+    </div>
+  </section>
+
+  <section class="invoice-preview rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+    <div id="invoice-print-area" class="invoice-sheet">
+      <header class="invoice-top">
+        <div class="top-line">
+          <span>GSTIN: {{ invoice().gstin }}</span>
+          <strong>INVOICE</strong>
+          <span>Cell: {{ invoice().phone }}</span>
+        </div>
+        <div class="brand-line">
+          <img src="/assets/logo.jpg" alt="RBS Chemical" />
+          <div>
+            <h2>{{ invoice().companyName }}</h2>
+            <p>{{ invoice().address }}</p>
+          </div>
+        </div>
+      </header>
+
+      <section class="invoice-meta">
+        <div class="bill-box">
+          <span>To</span>
+          <p>{{ invoice().billTo }}</p>
+        </div>
+        <div class="meta-grid">
+          <div><span>Invoice No.</span><strong>{{ invoice().invoiceNo }}</strong></div>
+          <div><span>Date</span><strong>{{ invoice().invoiceDate }}</strong></div>
+          <div><span>Order No.</span><strong>{{ invoice().orderNo }}</strong></div>
+          <div><span>Date</span><strong>{{ invoice().orderDate }}</strong></div>
+          <div><span>Way Bill No.</span><strong>{{ invoice().wayBillNo || '-' }}</strong></div>
+          <div><span>Date</span><strong>{{ invoice().wayBillDate || '-' }}</strong></div>
+          <div><span>Truck No.</span><strong>{{ invoice().truckNo }}</strong></div>
+          <div><span>Transport</span><strong>{{ invoice().transport }}</strong></div>
+        </div>
+      </section>
+
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>Product Description</th>
+            <th>Quantity</th>
+            <th>Rate</th>
+            <th>Per</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of items(); track $index) {
+            <tr>
+              <td>{{ item.description }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ formatCurrency(item.rate) }}</td>
+              <td>{{ item.per }}</td>
+              <td>{{ formatCurrency(item.quantity * item.rate) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <section class="invoice-bottom">
+        <div class="bank-box">
+          <h3>Bank Details</h3>
+          <p><span>Bank</span>{{ invoice().bankName }}</p>
+          <p><span>A/c No.</span>{{ invoice().accountNo }}</p>
+          <p><span>IFSC Code</span>{{ invoice().ifscCode }}</p>
+          <p><span>Branch</span>{{ invoice().branch }}</p>
+        </div>
+        <div class="total-box">
+          <p><span>Total</span><strong>{{ formatCurrency(subTotal()) }}</strong></p>
+          <p><span>CGST {{ invoice().cgstRate }}%</span><strong>{{ formatCurrency(cgstAmount()) }}</strong></p>
+          <p><span>SGST {{ invoice().sgstRate }}%</span><strong>{{ formatCurrency(sgstAmount()) }}</strong></p>
+          <p><span>Round Off</span><strong>{{ formatCurrency(invoice().roundOff) }}</strong></p>
+          <p class="grand"><span>Grand Total</span><strong>{{ formatCurrency(grandTotal()) }}</strong></p>
+        </div>
+      </section>
+
+      <section class="words-box">
+        <span>Amount Chargeable (in Words)</span>
+        <strong>{{ amountInWords(grandTotal()) }}</strong>
+      </section>
+
+      <section class="sign-row">
+        <div>
+          <p>Received the materials in good condition</p>
+          <strong>Signature of the Party with Seal</strong>
+        </div>
+        <div class="auth">
+          <p>For {{ invoice().companyName }}</p>
+          <strong>Authorised Signature</strong>
+        </div>
+      </section>
+
+      <footer class="terms-box">
+        <p>Subject to Tiruchendur Jurisdiction</p>
+        <strong>Terms & Conditions</strong>
+        <ol>
+          <li>Replacement / complaint will not be entertained 48 hours after delivery.</li>
+          <li>Interest at 24% will be charged if payment is not made within due date.</li>
+          <li>Rate will be applicable as per ruling price during supply.</li>
+          <li>We accept cash payments against our receipt only.</li>
+        </ol>
+      </footer>
+    </div>
+  </section>
+</div>

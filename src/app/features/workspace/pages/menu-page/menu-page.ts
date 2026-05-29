@@ -13,6 +13,7 @@ export class MenuPage {
     initialValue: {
       title: 'Workspace',
       description: 'Manage your daily business activity.',
+      showStats: true,
     },
   });
 }
