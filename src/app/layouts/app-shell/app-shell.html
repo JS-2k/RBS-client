@@ -1,0 +1,116 @@
+<main class="min-h-screen bg-slate-50 text-slate-950">
+  <div class="flex min-h-screen">
+    <aside class="fixed inset-y-0 left-0 z-20 hidden w-56 border-r border-slate-200 bg-white md:block">
+      <div class="flex h-14 items-center border-b border-slate-200 px-4">
+        <img src="/assets/logo.jpg" alt="RBS Chemical" class="h-9 w-auto object-contain" />
+      </div>
+
+      <nav class="space-y-1 p-3" aria-label="Main menu">
+        @for (item of menuItems; track item.path) {
+          <a
+            [routerLink]="item.path"
+            routerLinkActive="bg-slate-950 text-white"
+            #activeLink="routerLinkActive"
+            class="flex h-9 items-center gap-2 rounded-md px-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-950"
+          >
+            <span
+              class="grid h-6 w-6 place-items-center rounded border"
+              [class.border-white/20]="activeLink.isActive"
+              [class.border-slate-200]="!activeLink.isActive"
+              [class.bg-white/10]="activeLink.isActive"
+              [class.bg-slate-50]="!activeLink.isActive"
+            >
+              @switch (item.icon) {
+                @case ('customers') {
+                  <svg lucideUsers size="15" strokeWidth="2.2"></svg>
+                }
+                @case ('regions') {
+                  <svg lucideMapPinned size="15" strokeWidth="2.2"></svg>
+                }
+                @case ('invoices') {
+                  <svg lucideReceiptText size="15" strokeWidth="2.2"></svg>
+                }
+                @case ('quotations') {
+                  <svg lucideQuote size="15" strokeWidth="2.2"></svg>
+                }
+                @case ('products') {
+                  <svg lucideFlaskConical size="15" strokeWidth="2.2"></svg>
+                }
+                @case ('payments') {
+                  <svg lucideWalletCards size="15" strokeWidth="2.2"></svg>
+                }
+                @case ('reports') {
+                  <svg lucideChartNoAxesColumn size="15" strokeWidth="2.2"></svg>
+                }
+              }
+            </span>
+            <span>{{ item.label }}</span>
+          </a>
+        }
+      </nav>
+    </aside>
+
+    <div class="flex min-h-screen flex-1 flex-col md:pl-56">
+      <header class="sticky top-0 z-10 border-b border-slate-200 bg-white/95 backdrop-blur">
+        <div class="flex h-14 items-center justify-between px-4 sm:px-6">
+          <div class="flex items-center gap-3">
+            <img src="/assets/logo.jpg" alt="RBS Chemical" class="h-8 w-auto object-contain md:hidden" />
+            <div>
+              <p class="text-sm font-semibold leading-5 text-slate-950">RBS Chemical</p>
+              <p class="text-xs leading-4 text-slate-500">Business workspace</p>
+            </div>
+          </div>
+          <a
+            routerLink="/login"
+            class="inline-flex items-center gap-1.5 rounded-md border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-100"
+          >
+            <svg lucideLogOut size="14" strokeWidth="2.2"></svg>
+            Sign out
+          </a>
+        </div>
+
+        <nav
+          class="flex gap-1 overflow-x-auto border-t border-slate-100 px-3 py-2 md:hidden"
+          aria-label="Mobile menu"
+        >
+          @for (item of menuItems; track item.path) {
+            <a
+              [routerLink]="item.path"
+              routerLinkActive="bg-slate-950 text-white"
+              class="inline-flex shrink-0 items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold text-slate-600"
+            >
+              @switch (item.icon) {
+                @case ('customers') {
+                  <svg lucideUsers size="13" strokeWidth="2.2"></svg>
+                }
+                @case ('regions') {
+                  <svg lucideMapPinned size="13" strokeWidth="2.2"></svg>
+                }
+                @case ('invoices') {
+                  <svg lucideReceiptText size="13" strokeWidth="2.2"></svg>
+                }
+                @case ('quotations') {
+                  <svg lucideQuote size="13" strokeWidth="2.2"></svg>
+                }
+                @case ('products') {
+                  <svg lucideFlaskConical size="13" strokeWidth="2.2"></svg>
+                }
+                @case ('payments') {
+                  <svg lucideWalletCards size="13" strokeWidth="2.2"></svg>
+                }
+                @case ('reports') {
+                  <svg lucideChartNoAxesColumn size="13" strokeWidth="2.2"></svg>
+                }
+              }
+              {{ item.label }}
+            </a>
+          }
+        </nav>
+      </header>
+
+      <section class="flex-1 p-4 sm:p-6">
+        <router-outlet />
+      </section>
+    </div>
+  </div>
+</main>
