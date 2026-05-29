@@ -91,6 +91,11 @@ export const routes: Routes = [
           description: 'View compact summaries for daily business decisions.',
         },
       },
+      {
+        path: 'ask-ai',
+        loadComponent: () =>
+          import('./features/ask-ai/pages/ask-ai/ask-ai').then((component) => component.AskAi),
+      },
     ],
   },
   {

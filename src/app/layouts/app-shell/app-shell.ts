@@ -7,6 +7,7 @@ import {
   LucideMapPinned,
   LucideQuote,
   LucideReceiptText,
+  LucideSparkles,
   LucideUsers,
   LucideWalletCards,
 } from '@lucide/angular';
@@ -29,6 +30,7 @@ type MenuItem = {
     LucideMapPinned,
     LucideQuote,
     LucideReceiptText,
+    LucideSparkles,
     LucideUsers,
     LucideWalletCards,
   ],
@@ -44,5 +46,6 @@ export class AppShell {
     { label: 'Products', path: '/app/products', icon: 'products' },
     { label: 'Payments', path: '/app/payments', icon: 'payments' },
     { label: 'Reports', path: '/app/reports', icon: 'reports' },
+    { label: 'Ask AI', path: '/app/ask-ai', icon: 'ask-ai' },
   ];
 }
