@@ -1,0 +1,180 @@
+:host {
+  display: block;
+}
+
+.customer-workspace {
+  margin: -1rem;
+  background: #ffffff;
+}
+
+.form-scroll {
+  max-height: calc(100vh - 11.25rem);
+  overflow-y: auto;
+}
+
+.form-section {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.25rem;
+  background: #ffffff;
+  padding: 0.75rem;
+}
+
+.section-title h2 {
+  color: #0f172a;
+  font-size: 0.875rem;
+  font-weight: 800;
+}
+
+.section-title p {
+  margin-top: 0.25rem;
+  color: #475569;
+  font-size: 0.8125rem;
+}
+
+.section-fields {
+  display: grid;
+  gap: 0.875rem;
+}
+
+.field span {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: #475569;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-height: 2.25rem;
+  border: 1px solid #d3dce7;
+  border-radius: 0.25rem;
+  background: #ffffff;
+  padding: 0.45rem 0.6rem;
+  color: #0f172a;
+  font-size: 0.8125rem;
+  outline: none;
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgb(14 165 233 / 0.14);
+}
+
+.customer-grid-head,
+.customer-grid-row {
+  display: grid;
+  grid-template-columns: 110px minmax(220px, 1fr) 140px 150px 110px 140px;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.customer-grid-head {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0.5rem 1rem;
+  color: #64748b;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.customer-grid-row {
+  width: 100%;
+  border-bottom: 1px solid #f1f5f9;
+  padding: 0.6rem 1rem;
+  font-size: 0.875rem;
+  text-align: left;
+}
+
+.customer-grid-row small {
+  display: block;
+  color: #64748b;
+  font-size: 0.72rem;
+}
+
+.customer-grid-row mark {
+  border-radius: 0.25rem;
+  padding: 0.12rem 0.4rem;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.customer-grid-row mark.active {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.customer-grid-row mark.hold {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.customer-grid-row mark.inactive {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.primary-button,
+.secondary-button {
+  min-height: 2.25rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.25rem;
+  padding: 0.3rem 0.8rem;
+  color: #0f172a;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.primary-button {
+  border-color: #020617;
+  background: #020617;
+  color: #ffffff;
+}
+
+.secondary-button {
+  background: #ffffff;
+  color: #334155;
+}
+
+@media (min-width: 640px) {
+  .customer-workspace {
+    margin: -1.5rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .form-scroll {
+    max-height: none;
+  }
+
+  .form-section {
+    grid-template-columns: 1fr;
+  }
+
+  .customer-grid-head {
+    display: none;
+  }
+
+  .customer-grid-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .customer-grid-row {
+    grid-template-columns: 1fr;
+  }
+}

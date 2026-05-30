@@ -38,7 +38,7 @@ export class AskAi implements AfterViewChecked {
   private lastScrollState = '';
 
   protected prompt = '';
-  protected readonly assistantName = 'RBS AI';
+  protected readonly assistantName = 'Aira';
 
   protected readonly suggestions: Suggestion[] = [
     {
@@ -62,7 +62,7 @@ export class AskAi implements AfterViewChecked {
   protected readonly messages = signal<ChatMessage[]>([
     {
       role: 'assistant',
-      text: 'Hi, I am RBS AI. I can help with customers, invoices, payments, products, quotations, and reports. What should we work on?',
+      text: 'Hi, I am Aira. I can help with customers, invoices, payments, products, quotations, and reports. What should we work on?',
     },
   ]);
   protected readonly isAsking = signal(false);
@@ -99,6 +99,7 @@ export class AskAi implements AfterViewChecked {
       this.messages.update((messages) => [...messages, { role: 'assistant', text: answer }]);
     } finally {
       this.isAsking.set(false);
+      this.resetPromptInputHeight();
     }
   }
 
@@ -106,10 +107,17 @@ export class AskAi implements AfterViewChecked {
     this.messages.set([
       {
         role: 'assistant',
-        text: 'Fresh chat started. RBS AI is ready for customers, invoices, payments, products, quotations, or reports.',
+        text: 'Fresh chat started. Aira is ready for customers, invoices, payments, products, quotations, or reports.',
       },
     ]);
     this.prompt = '';
+    this.resetPromptInputHeight();
+  }
+
+  protected resizePromptInput(event: Event): void {
+    const input = event.target as HTMLTextAreaElement;
+    input.style.height = 'auto';
+    input.style.height = `${Math.min(input.scrollHeight, 180)}px`;
   }
 
   private scrollToBottom(): void {
@@ -122,6 +130,16 @@ export class AskAi implements AfterViewChecked {
     scroller.scrollTo({
       top: scroller.scrollHeight,
       behavior: 'smooth',
+    });
+  }
+
+  private resetPromptInputHeight(): void {
+    window.setTimeout(() => {
+      const input = document.querySelector<HTMLTextAreaElement>('.chat-composer-input');
+
+      if (input) {
+        input.style.height = 'auto';
+      }
     });
   }
 }

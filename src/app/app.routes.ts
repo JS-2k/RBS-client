@@ -24,14 +24,9 @@ export const routes: Routes = [
       {
         path: 'customers',
         loadComponent: () =>
-          import('./features/workspace/pages/menu-page/menu-page').then(
-            (component) => component.MenuPage,
+          import('./features/customers/pages/customer-list/customer-list').then(
+            (component) => component.CustomerList,
           ),
-        data: {
-          title: 'Customers',
-          description: 'Manage customer profiles, contact details, and account status.',
-          showStats: false,
-        },
       },
       {
         path: 'regions',

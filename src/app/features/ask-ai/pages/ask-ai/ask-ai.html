@@ -6,7 +6,7 @@
       </span>
       <div class="min-w-0">
         <h1 class="truncate text-base font-semibold text-slate-950">{{ assistantName }}</h1>
-        <p class="truncate text-xs text-slate-500">RBS workspace assistant</p>
+        <p class="truncate text-xs text-slate-500">RBS business assistant</p>
       </div>
     </div>
 
@@ -81,17 +81,19 @@
         }
       </div>
 
-      <div class="flex items-end gap-2 rounded-lg border border-slate-200 bg-slate-50 p-2 focus-within:border-sky-600 focus-within:bg-white focus-within:ring-2 focus-within:ring-sky-100">
+      <div class="chat-composer" [class.has-prompt]="prompt.trim()">
         <textarea
+          #promptInput
           [(ngModel)]="prompt"
           rows="1"
-          class="max-h-32 min-h-10 flex-1 resize-none bg-transparent px-2 py-2 text-sm leading-6 text-slate-900 outline-none"
-          placeholder="Message Ask AI..."
+          class="chat-composer-input"
+          placeholder="Ask anything"
           [disabled]="isAsking()"
+          (input)="resizePromptInput($event)"
         ></textarea>
         <button
           type="button"
-          class="grid h-10 w-10 shrink-0 place-items-center rounded-md bg-slate-950 text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-300"
+          class="chat-composer-send"
           (click)="generateResponse()"
           [disabled]="isAsking() || !prompt.trim()"
           aria-label="Send message"

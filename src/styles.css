@@ -40,22 +40,25 @@ body {
 @media print {
   @page {
     size: A4 landscape;
-    margin: 7mm;
+    margin: 5mm;
   }
 
-  body.invoice-printing * {
-    visibility: hidden;
+  body.invoice-printing app-root {
+    display: none;
   }
 
-  body.invoice-printing #invoice-print-area,
-  body.invoice-printing #invoice-print-area * {
-    visibility: visible;
+  body.invoice-printing #invoice-print-copy {
+    display: block;
   }
 
-  body.invoice-printing #invoice-print-area {
-    position: absolute;
-    inset: 0 auto auto 0;
-    width: calc(297mm - 14mm);
+  body.invoice-printing #invoice-print-copy {
+    position: fixed;
+    inset: 1mm auto auto 1mm;
+    width: calc(297mm - 12mm);
+    box-sizing: border-box;
+    break-after: avoid;
+    page-break-after: avoid;
+    page-break-inside: avoid;
   }
 
   body.invoice-printing {

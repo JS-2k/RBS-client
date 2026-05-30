@@ -312,16 +312,15 @@ export class CustomerOutstanding implements AfterViewInit {
 
   protected readonly filteredGroups = computed(() => {
     const query = this.search().trim().toLowerCase();
+    const selectedKey = this.selectedDistrict();
+    const sourceGroups = selectedKey
+      ? this.districtGroups.filter((group) => group.key === selectedKey)
+      : this.districtGroups;
 
-    return this.districtGroups
+    return sourceGroups
       .map((group) => {
         const customers = query
-          ? group.customers.filter(
-              (customer) =>
-                customer.name.toLowerCase().includes(query) ||
-                customer.city.toLowerCase().includes(query) ||
-                group.key.includes(query),
-            )
+          ? group.customers.filter((customer) => this.matchesCustomerSearch(customer, group, query))
           : group.customers;
 
         return {
@@ -335,7 +334,7 @@ export class CustomerOutstanding implements AfterViewInit {
 
   protected readonly selectedGroup = computed(() => {
     const key = this.selectedDistrict();
-    return key ? this.findDistrict(key) : null;
+    return key ? (this.filteredGroups().find((group) => group.key === key) ?? this.findDistrict(key)) : null;
   });
 
   protected readonly filteredTotalInvoices = computed(() =>
@@ -521,6 +520,15 @@ export class CustomerOutstanding implements AfterViewInit {
 
   private findDistrict(key: string): DistrictGroup | undefined {
     return this.districtGroups.find((group) => group.key === key);
+  }
+
+  private matchesCustomerSearch(customer: Customer, group: DistrictGroup, query: string): boolean {
+    return (
+      customer.name.toLowerCase().includes(query) ||
+      customer.city.toLowerCase().includes(query) ||
+      group.label.toLowerCase().includes(query) ||
+      group.key.includes(query)
+    );
   }
 
   private buildDistrictGroups(): DistrictGroup[] {

@@ -1,3 +1,70 @@
 :host {
   display: block;
 }
+
+.chat-composer {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 3rem;
+  border-radius: 999px;
+  border: 1px solid #dbe3ee;
+  background: #f8fafc;
+  padding: 0.35rem 0.45rem 0.35rem 1.1rem;
+  transition:
+    border-radius 140ms ease,
+    align-items 140ms ease,
+    padding 140ms ease;
+}
+
+.chat-composer.has-prompt,
+.chat-composer:focus-within {
+  align-items: flex-end;
+  border-radius: 1.4rem;
+  border-color: #93c5fd;
+  background: #ffffff;
+  padding: 0.75rem 0.55rem 0.55rem 1.15rem;
+  box-shadow: 0 0 0 3px rgb(14 165 233 / 0.1);
+}
+
+.chat-composer-input {
+  max-height: 180px;
+  min-height: 1.65rem;
+  flex: 1;
+  resize: none;
+  overflow-y: auto;
+  border: 0;
+  background: transparent;
+  color: #0f172a;
+  font-size: 0.95rem;
+  line-height: 1.55rem;
+  outline: none;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.chat-composer-input::placeholder {
+  color: #64748b;
+}
+
+.chat-composer-input:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.chat-composer-send {
+  display: grid;
+  width: 2.35rem;
+  height: 2.35rem;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 999px;
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.chat-composer-send:disabled {
+  background: #d9e2ef;
+  color: #64748b;
+  cursor: not-allowed;
+}

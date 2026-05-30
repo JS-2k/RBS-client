@@ -30,6 +30,15 @@ type InvoiceDraft = {
   roundOff: number;
 };
 
+type InvoiceRow = {
+  invoiceNo: string;
+  date: string;
+  customer: string;
+  city: string;
+  amount: number;
+  status: 'Paid' | 'Pending' | 'Overdue';
+};
+
 @Component({
   selector: 'app-invoice-create',
   standalone: true,
@@ -37,6 +46,12 @@ type InvoiceDraft = {
   styleUrl: './invoice-create.css',
 })
 export class InvoiceCreate {
+  protected readonly view = signal<'list' | 'create'>('list');
+  protected readonly previewOpen = signal(false);
+  protected readonly search = signal('');
+  protected readonly statusFilter = signal('All');
+  protected readonly cityFilter = signal('All');
+
   protected readonly invoice = signal<InvoiceDraft>({
     gstin: '33BSVPG7383L1ZY',
     phone: '99436 90423',
@@ -78,6 +93,59 @@ export class InvoiceCreate {
   protected readonly grandTotal = computed(
     () => this.subTotal() + this.cgstAmount() + this.sgstAmount() + this.invoice().roundOff,
   );
+  protected readonly invoiceRows: InvoiceRow[] = [
+    {
+      invoiceNo: '1042',
+      date: '2024-10-14',
+      customer: 'PMV Dyeing Mills',
+      city: 'Tiruppur',
+      amount: 11250,
+      status: 'Pending',
+    },
+    {
+      invoiceNo: '1041',
+      date: '2024-10-11',
+      customer: 'Lakshmi Agencies',
+      city: 'Erode',
+      amount: 2430000,
+      status: 'Overdue',
+    },
+    {
+      invoiceNo: '1040',
+      date: '2024-10-08',
+      customer: 'Cauvery Agencies',
+      city: 'Thanjavur',
+      amount: 980000,
+      status: 'Paid',
+    },
+    {
+      invoiceNo: '1039',
+      date: '2024-10-04',
+      customer: 'Anbu Traders',
+      city: 'Tiruppur',
+      amount: 6100000,
+      status: 'Pending',
+    },
+  ];
+  protected readonly cityOptions = ['All', ...new Set(this.invoiceRows.map((invoice) => invoice.city))];
+  protected readonly statusOptions = ['All', 'Paid', 'Pending', 'Overdue'];
+  protected readonly filteredInvoices = computed(() => {
+    const query = this.search().trim().toLowerCase();
+    const status = this.statusFilter();
+    const city = this.cityFilter();
+
+    return this.invoiceRows.filter((invoice) => {
+      const matchesQuery =
+        !query ||
+        invoice.invoiceNo.toLowerCase().includes(query) ||
+        invoice.customer.toLowerCase().includes(query) ||
+        invoice.city.toLowerCase().includes(query);
+      const matchesStatus = status === 'All' || invoice.status === status;
+      const matchesCity = city === 'All' || invoice.city === city;
+
+      return matchesQuery && matchesStatus && matchesCity;
+    });
+  });
 
   protected updateInvoice<K extends keyof InvoiceDraft>(field: K, value: InvoiceDraft[K]): void {
     this.invoice.update((invoice) => ({ ...invoice, [field]: value }));
@@ -98,6 +166,27 @@ export class InvoiceCreate {
           : item,
       ),
     );
+  }
+
+  protected openCreate(): void {
+    this.view.set('create');
+  }
+
+  protected backToList(): void {
+    this.previewOpen.set(false);
+    this.view.set('list');
+  }
+
+  protected updateSearch(event: Event): void {
+    this.search.set((event.target as HTMLInputElement).value);
+  }
+
+  protected updateStatusFilter(event: Event): void {
+    this.statusFilter.set((event.target as HTMLSelectElement).value);
+  }
+
+  protected updateCityFilter(event: Event): void {
+    this.cityFilter.set((event.target as HTMLSelectElement).value);
   }
 
   protected addItem(): void {
@@ -176,9 +265,45 @@ export class InvoiceCreate {
     return `${parts.join(' ')} Rupees Only`;
   }
 
+  protected openPreview(): void {
+    this.previewOpen.set(true);
+  }
+
+  protected closePreview(): void {
+    this.previewOpen.set(false);
+  }
+
+  protected printFromForm(): void {
+    const wasPreviewOpen = this.previewOpen();
+
+    if (!wasPreviewOpen) {
+      this.previewOpen.set(true);
+      window.setTimeout(() => {
+        this.printInvoice();
+        window.setTimeout(() => this.previewOpen.set(false), 300);
+      });
+      return;
+    }
+
+    this.printInvoice();
+  }
+
   protected printInvoice(): void {
+    const invoiceSheet = document.getElementById('invoice-print-area');
+
+    if (!invoiceSheet) {
+      return;
+    }
+
+    document.getElementById('invoice-print-copy')?.remove();
+    const printCopy = invoiceSheet.cloneNode(true) as HTMLElement;
+    printCopy.id = 'invoice-print-copy';
+    document.body.appendChild(printCopy);
     document.body.classList.add('invoice-printing');
     window.print();
-    window.setTimeout(() => document.body.classList.remove('invoice-printing'), 250);
+    window.setTimeout(() => {
+      document.body.classList.remove('invoice-printing');
+      printCopy.remove();
+    }, 250);
   }
 }

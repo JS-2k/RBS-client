@@ -1,0 +1,174 @@
+@if (view() === 'list') {
+  <div class="customer-workspace">
+    <section class="bg-white">
+      <div class="flex flex-col gap-2 border-b border-slate-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p class="text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-700">Customers</p>
+          <h1 class="text-lg font-semibold text-slate-950">Customer list</h1>
+        </div>
+        <button type="button" class="primary-button" (click)="openCreate()">Create customer</button>
+      </div>
+
+      <div class="grid gap-2 border-b border-slate-200 bg-white px-4 py-3 md:grid-cols-[1fr_150px_150px]">
+        <label class="field">
+          <span>Search</span>
+          <input
+            type="search"
+            [value]="search()"
+            (input)="updateSearch($event)"
+            placeholder="Code, customer, city, GSTIN"
+          />
+        </label>
+        <label class="field">
+          <span>Status</span>
+          <select [value]="statusFilter()" (change)="updateStatusFilter($event)">
+            @for (status of statusOptions; track status) {
+              <option [value]="status">{{ status }}</option>
+            }
+          </select>
+        </label>
+        <label class="field">
+          <span>City</span>
+          <select [value]="cityFilter()" (change)="updateCityFilter($event)">
+            @for (city of cityOptions; track city) {
+              <option [value]="city">{{ city }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      <div class="customer-grid">
+        <div class="customer-grid-head">
+          <span>Code</span>
+          <span>Customer</span>
+          <span>City</span>
+          <span>Phone</span>
+          <span>Status</span>
+          <span class="text-right">Outstanding</span>
+        </div>
+
+        @for (row of filteredCustomers(); track row.code) {
+          <button type="button" class="customer-grid-row" (click)="openCreate()">
+            <span class="font-semibold">{{ row.code }}</span>
+            <span>
+              <strong>{{ row.name }}</strong>
+              <small>{{ row.gstin }}</small>
+            </span>
+            <span>{{ row.city }}</span>
+            <span>{{ row.phone }}</span>
+            <span><mark [class]="row.status.toLowerCase()">{{ row.status }}</mark></span>
+            <span class="text-right font-semibold">{{ formatCurrency(row.outstanding) }}</span>
+          </button>
+        } @empty {
+          <div class="p-8 text-center text-sm text-slate-400">No customers found.</div>
+        }
+      </div>
+    </section>
+  </div>
+}
+
+@if (view() === 'create') {
+  <div class="customer-workspace">
+    <section class="overflow-hidden bg-white">
+      <div class="flex flex-col gap-2 border-b border-slate-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p class="text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-700">Customers</p>
+          <h1 class="text-lg font-semibold text-slate-950">Create customer</h1>
+        </div>
+        <button type="button" class="secondary-button" (click)="backToList()">Back to list</button>
+      </div>
+
+      <div class="form-scroll space-y-3 p-4">
+        <section class="form-section">
+          <div class="section-title">
+            <h2>Basic details</h2>
+            <p>Customer identity and contact.</p>
+          </div>
+          <div class="section-fields">
+            <div class="grid gap-3 md:grid-cols-3">
+              <label class="field">
+                <span>Customer code</span>
+                <input [value]="customer().code" (input)="updateCustomer('code', $any($event.target).value)" />
+              </label>
+              <label class="field md:col-span-2">
+                <span>Customer name</span>
+                <input [value]="customer().name" (input)="updateCustomer('name', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>Phone</span>
+                <input [value]="customer().phone" (input)="updateCustomer('phone', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>Email</span>
+                <input type="email" [value]="customer().email" (input)="updateCustomer('email', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>GSTIN</span>
+                <input [value]="customer().gstin" (input)="updateCustomer('gstin', $any($event.target).value)" />
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <div class="section-title">
+            <h2>Address</h2>
+            <p>Billing city and district.</p>
+          </div>
+          <div class="section-fields">
+            <div class="grid gap-3 md:grid-cols-2">
+              <label class="field">
+                <span>City</span>
+                <input [value]="customer().city" (input)="updateCustomer('city', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>District</span>
+                <input [value]="customer().district" (input)="updateCustomer('district', $any($event.target).value)" />
+              </label>
+            </div>
+            <label class="field">
+              <span>Address</span>
+              <textarea rows="3" [value]="customer().address" (input)="updateCustomer('address', $any($event.target).value)"></textarea>
+            </label>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <div class="section-title">
+            <h2>Account</h2>
+            <p>Credit and payment preferences.</p>
+          </div>
+          <div class="section-fields">
+            <div class="grid gap-3 md:grid-cols-4">
+              <label class="field">
+                <span>Contact person</span>
+                <input [value]="customer().contactPerson" (input)="updateCustomer('contactPerson', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>Credit limit</span>
+                <input type="number" [value]="customer().creditLimit" (input)="updateCreditLimit($any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>Payment terms</span>
+                <input [value]="customer().paymentTerms" (input)="updateCustomer('paymentTerms', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>Status</span>
+                <select [value]="customer().status" (change)="updateCustomer('status', $any($event.target).value)">
+                  <option value="Active">Active</option>
+                  <option value="Hold">Hold</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </label>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="flex justify-end gap-2 border-t border-slate-200 bg-white px-4 py-3">
+        <button type="button" class="secondary-button" (click)="backToList()">Cancel</button>
+        <button type="button" class="primary-button" (click)="backToList()">Save customer</button>
+      </div>
+    </section>
+  </div>
+}
