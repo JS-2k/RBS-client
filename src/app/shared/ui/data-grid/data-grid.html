@@ -5,7 +5,7 @@
     }
   </div>
 
-  @for (row of rows; track $index) {
+  @for (row of pagedRows(); track $index) {
     <button
       type="button"
       class="data-grid-row"
@@ -27,5 +27,26 @@
     </button>
   } @empty {
     <div class="data-grid-empty">{{ emptyText }}</div>
+  }
+
+  @if (totalRecords() > 0) {
+    <footer class="data-grid-footer">
+      <p>Showing {{ pageStart() }}-{{ pageEnd() }} of {{ totalRecords() }}</p>
+
+      <div class="pagination-controls" aria-label="Table pagination">
+        <button type="button" (click)="previousPage()" [disabled]="currentPage() === 1">Previous</button>
+        @for (page of pageNumbers(); track page) {
+          <button
+            type="button"
+            class="page-button"
+            [class.is-active]="page === currentPage()"
+            (click)="goToPage(page)"
+          >
+            {{ page }}
+          </button>
+        }
+        <button type="button" (click)="nextPage()" [disabled]="currentPage() === totalPages()">Next</button>
+      </div>
+    </footer>
   }
 </div>

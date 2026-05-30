@@ -158,11 +158,11 @@
                 </label>
                 <label class="field">
                   <span>Qty</span>
-                  <input type="number" [value]="item.quantity" (input)="updateItem($index, 'quantity', $any($event.target).value)" />
+                  <input type="number" [value]="item.quantity ?? ''" (input)="updateItem($index, 'quantity', $any($event.target).value)" />
                 </label>
                 <label class="field">
                   <span>Rate</span>
-                  <input type="number" [value]="item.rate" (input)="updateItem($index, 'rate', $any($event.target).value)" />
+                  <input type="number" [value]="item.rate ?? ''" (input)="updateItem($index, 'rate', $any($event.target).value)" />
                 </label>
                 <label class="field">
                   <span>Per</span>
@@ -185,15 +185,15 @@
           <div class="grid gap-3 md:grid-cols-3">
             <label class="field">
               <span>CGST %</span>
-              <input type="number" [value]="invoice().cgstRate" (input)="updateNumber('cgstRate', $any($event.target).value)" />
+              <input type="number" [value]="invoice().cgstRate ?? ''" (input)="updateNumber('cgstRate', $any($event.target).value)" />
             </label>
             <label class="field">
               <span>SGST %</span>
-              <input type="number" [value]="invoice().sgstRate" (input)="updateNumber('sgstRate', $any($event.target).value)" />
+              <input type="number" [value]="invoice().sgstRate ?? ''" (input)="updateNumber('sgstRate', $any($event.target).value)" />
             </label>
             <label class="field">
               <span>Round off</span>
-              <input type="number" [value]="invoice().roundOff" (input)="updateNumber('roundOff', $any($event.target).value)" />
+              <input type="number" [value]="invoice().roundOff ?? ''" (input)="updateNumber('roundOff', $any($event.target).value)" />
             </label>
           </div>
 
@@ -293,13 +293,13 @@
             </thead>
             <tbody>
               @for (item of items(); track $index) {
-                <tr>
-                  <td>{{ item.description }}</td>
-                  <td>{{ item.quantity }}</td>
-                  <td>{{ formatCurrency(item.rate) }}</td>
-                  <td>{{ item.per }}</td>
-                  <td>{{ formatCurrency(item.quantity * item.rate) }}</td>
-                </tr>
+              <tr>
+                <td>{{ item.description }}</td>
+                <td>{{ item.quantity ?? '' }}</td>
+                <td>{{ formatCurrency(item.rate ?? 0) }}</td>
+                <td>{{ item.per }}</td>
+                <td>{{ formatCurrency((item.quantity ?? 0) * (item.rate ?? 0)) }}</td>
+              </tr>
               }
             </tbody>
           </table>
@@ -314,9 +314,9 @@
             </div>
             <div class="total-box">
               <p><span>Total</span><strong>{{ formatCurrency(subTotal()) }}</strong></p>
-              <p><span>CGST {{ invoice().cgstRate }}%</span><strong>{{ formatCurrency(cgstAmount()) }}</strong></p>
-              <p><span>SGST {{ invoice().sgstRate }}%</span><strong>{{ formatCurrency(sgstAmount()) }}</strong></p>
-              <p><span>Round Off</span><strong>{{ formatCurrency(invoice().roundOff) }}</strong></p>
+              <p><span>CGST {{ invoice().cgstRate ?? 0 }}%</span><strong>{{ formatCurrency(cgstAmount()) }}</strong></p>
+              <p><span>SGST {{ invoice().sgstRate ?? 0 }}%</span><strong>{{ formatCurrency(sgstAmount()) }}</strong></p>
+              <p><span>Round Off</span><strong>{{ formatCurrency(invoice().roundOff ?? 0) }}</strong></p>
               <p class="grand"><span>Grand Total</span><strong>{{ formatCurrency(grandTotal()) }}</strong></p>
             </div>
           </section>

@@ -4,8 +4,8 @@ import { DataGrid, DataGridColumn } from '../../../../shared/ui/data-grid/data-g
 
 type InvoiceItem = {
   description: string;
-  quantity: number;
-  rate: number;
+  quantity: number | null;
+  rate: number | null;
   per: string;
 };
 
@@ -27,9 +27,9 @@ type InvoiceDraft = {
   accountNo: string;
   ifscCode: string;
   branch: string;
-  cgstRate: number;
-  sgstRate: number;
-  roundOff: number;
+  cgstRate: number | null;
+  sgstRate: number | null;
+  roundOff: number | null;
 };
 
 type InvoiceRow = {
@@ -40,6 +40,36 @@ type InvoiceRow = {
   amount: number;
   status: 'Paid' | 'Pending' | 'Overdue';
 };
+
+const createEmptyInvoice = (): InvoiceDraft => ({
+  gstin: '',
+  phone: '',
+  companyName: '',
+  address: '',
+  billTo: '',
+  invoiceNo: '',
+  invoiceDate: '',
+  orderNo: '',
+  orderDate: '',
+  wayBillNo: '',
+  wayBillDate: '',
+  truckNo: '',
+  transport: '',
+  bankName: '',
+  accountNo: '',
+  ifscCode: '',
+  branch: '',
+  cgstRate: null,
+  sgstRate: null,
+  roundOff: null,
+});
+
+const createEmptyItem = (): InvoiceItem => ({
+  description: '',
+  quantity: null,
+  rate: null,
+  per: '',
+});
 
 @Component({
   selector: 'app-invoice-create',
@@ -55,46 +85,18 @@ export class InvoiceCreate {
   protected readonly statusFilter = signal('All');
   protected readonly cityFilter = signal('All');
 
-  protected readonly invoice = signal<InvoiceDraft>({
-    gstin: '33BSVPG7383L1ZY',
-    phone: '99436 90423',
-    companyName: 'RBS Chemical',
-    address: 'No. 172, Thiruchendur Main Road, Sonaganvillai, Thoothukudi Dist - 628 201.',
-    billTo: 'PMV Dyeing Mills, SF No. 225, Aggaragara, Periyapalayam, Tiruppur',
-    invoiceNo: '1042',
-    invoiceDate: '2024-10-14',
-    orderNo: 'Telephonic',
-    orderDate: '2024-10-14',
-    wayBillNo: '',
-    wayBillDate: '',
-    truckNo: 'TN 42',
-    transport: 'BK 163742',
-    bankName: 'Tamilnad Mercantile Bank Ltd.',
-    accountNo: '068150050800202',
-    ifscCode: 'TMBL0000068',
-    branch: 'Sonaganvillai',
-    cgstRate: 0,
-    sgstRate: 0,
-    roundOff: 0,
-  });
+  protected readonly invoice = signal<InvoiceDraft>(createEmptyInvoice());
 
-  protected readonly items = signal<InvoiceItem[]>([
-    {
-      description: 'Salt CHSNSAC 25010000',
-      quantity: 30,
-      rate: 375,
-      per: 'Bag',
-    },
-  ]);
+  protected readonly items = signal<InvoiceItem[]>([createEmptyItem()]);
 
   protected readonly subTotal = computed(() =>
-    this.items().reduce((sum, item) => sum + item.quantity * item.rate, 0),
+    this.items().reduce((sum, item) => sum + (item.quantity ?? 0) * (item.rate ?? 0), 0),
   );
 
-  protected readonly cgstAmount = computed(() => (this.subTotal() * this.invoice().cgstRate) / 100);
-  protected readonly sgstAmount = computed(() => (this.subTotal() * this.invoice().sgstRate) / 100);
+  protected readonly cgstAmount = computed(() => (this.subTotal() * (this.invoice().cgstRate ?? 0)) / 100);
+  protected readonly sgstAmount = computed(() => (this.subTotal() * (this.invoice().sgstRate ?? 0)) / 100);
   protected readonly grandTotal = computed(
-    () => this.subTotal() + this.cgstAmount() + this.sgstAmount() + this.invoice().roundOff,
+    () => this.subTotal() + this.cgstAmount() + this.sgstAmount() + (this.invoice().roundOff ?? 0),
   );
   protected readonly invoiceRows: InvoiceRow[] = [
     {
@@ -168,7 +170,7 @@ export class InvoiceCreate {
   }
 
   protected updateNumber(field: 'cgstRate' | 'sgstRate' | 'roundOff', value: string): void {
-    this.updateInvoice(field, Number(value) || 0);
+    this.updateInvoice(field, value === '' ? null : Number(value) || 0);
   }
 
   protected updateItem(index: number, field: keyof InvoiceItem, value: string): void {
@@ -177,7 +179,7 @@ export class InvoiceCreate {
         itemIndex === index
           ? {
               ...item,
-              [field]: field === 'quantity' || field === 'rate' ? Number(value) || 0 : value,
+              [field]: field === 'quantity' || field === 'rate' ? (value === '' ? null : Number(value) || 0) : value,
             }
           : item,
       ),
@@ -185,6 +187,9 @@ export class InvoiceCreate {
   }
 
   protected openCreate(): void {
+    this.invoice.set(createEmptyInvoice());
+    this.items.set([createEmptyItem()]);
+    this.previewOpen.set(false);
     this.view.set('create');
   }
 
@@ -206,15 +211,7 @@ export class InvoiceCreate {
   }
 
   protected addItem(): void {
-    this.items.update((items) => [
-      ...items,
-      {
-        description: '',
-        quantity: 1,
-        rate: 0,
-        per: 'Bag',
-      },
-    ]);
+    this.items.update((items) => [...items, createEmptyItem()]);
   }
 
   protected removeItem(index: number): void {

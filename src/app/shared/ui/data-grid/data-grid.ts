@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, computed, signal } from '@angular/core';
 
 export type DataGridColumn = {
   key: string;
@@ -25,13 +25,47 @@ export type DataGridRow = Record<string, unknown>;
 })
 export class DataGrid {
   @Input({ required: true }) columns: DataGridColumn[] = [];
-  @Input({ required: true }) rows: readonly unknown[] = [];
+  @Input({ required: true }) set rows(value: readonly unknown[]) {
+    this.rowsSignal.set(value ?? []);
+    this.currentPage.set(1);
+  }
+
   @Input() emptyText = 'No records found.';
 
   @Output() rowSelected = new EventEmitter<unknown>();
 
+  protected readonly pageSize = 5;
+  protected readonly currentPage = signal(1);
+  private readonly rowsSignal = signal<readonly unknown[]>([]);
+
+  protected readonly totalRecords = computed(() => this.rowsSignal().length);
+  protected readonly totalPages = computed(() => Math.max(Math.ceil(this.totalRecords() / this.pageSize), 1));
+  protected readonly pagedRows = computed(() => {
+    const start = (this.currentPage() - 1) * this.pageSize;
+    return this.rowsSignal().slice(start, start + this.pageSize);
+  });
+  protected readonly pageStart = computed(() =>
+    this.totalRecords() === 0 ? 0 : (this.currentPage() - 1) * this.pageSize + 1,
+  );
+  protected readonly pageEnd = computed(() => Math.min(this.currentPage() * this.pageSize, this.totalRecords()));
+  protected readonly pageNumbers = computed(() =>
+    Array.from({ length: this.totalPages() }, (_, index) => index + 1),
+  );
+
   protected gridTemplate(): string {
     return this.columns.map((column) => column.width ?? 'minmax(120px, 1fr)').join(' ');
+  }
+
+  protected previousPage(): void {
+    this.currentPage.update((page) => Math.max(page - 1, 1));
+  }
+
+  protected nextPage(): void {
+    this.currentPage.update((page) => Math.min(page + 1, this.totalPages()));
+  }
+
+  protected goToPage(page: number): void {
+    this.currentPage.set(page);
   }
 
   protected value(row: unknown, key: string): unknown {
