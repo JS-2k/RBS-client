@@ -1,0 +1,103 @@
+:host {
+  display: block;
+}
+
+.data-grid {
+  width: 100%;
+}
+
+.data-grid-head,
+.data-grid-row {
+  display: grid;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.data-grid-head {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0.5rem 1rem;
+  color: #64748b;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.data-grid-row {
+  width: 100%;
+  border-bottom: 1px solid #f1f5f9;
+  padding: 0.6rem 1rem;
+  color: #0f172a;
+  font-size: 0.875rem;
+  text-align: left;
+}
+
+.primary-value {
+  display: block;
+  font-weight: 400;
+}
+
+.primary-value.is-bold {
+  font-weight: 700;
+}
+
+.data-grid-row small {
+  display: block;
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 400;
+}
+
+.badge {
+  border-radius: 0.25rem;
+  padding: 0.12rem 0.4rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.badge-blue {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.badge-green {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.badge-amber {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.badge-red {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.badge-slate {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.data-grid-empty {
+  padding: 2rem;
+  color: #94a3b8;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .data-grid-head {
+    display: none;
+  }
+
+  .data-grid-row {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .data-grid-row {
+    grid-template-columns: 1fr !important;
+  }
+}

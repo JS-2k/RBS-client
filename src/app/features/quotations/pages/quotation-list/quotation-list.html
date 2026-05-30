@@ -1,0 +1,252 @@
+@if (view() === 'list') {
+  <div class="quotation-workspace">
+    <section class="bg-white">
+      <div class="flex flex-col gap-2 border-b border-slate-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p class="text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-700">Quotations</p>
+          <h1 class="text-lg font-semibold text-slate-950">Quotation list</h1>
+        </div>
+        <button type="button" class="primary-button" (click)="openCreate()">Create quotation</button>
+      </div>
+
+      <div class="grid gap-2 border-b border-slate-200 bg-white px-4 py-3 md:grid-cols-[1fr_150px_150px]">
+        <label class="field">
+          <span>Search</span>
+          <input
+            type="search"
+            [value]="search()"
+            (input)="updateSearch($event)"
+            placeholder="Quotation no, customer, city"
+          />
+        </label>
+        <label class="field">
+          <span>Status</span>
+          <select [value]="statusFilter()" (change)="updateStatusFilter($event)">
+            @for (status of statusOptions; track status) {
+              <option [value]="status">{{ status }}</option>
+            }
+          </select>
+        </label>
+        <label class="field">
+          <span>City</span>
+          <select [value]="cityFilter()" (change)="updateCityFilter($event)">
+            @for (city of cityOptions; track city) {
+              <option [value]="city">{{ city }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      <app-data-grid
+        [columns]="quotationColumns"
+        [rows]="filteredQuotations()"
+        emptyText="No quotations found."
+        (rowSelected)="openCreate()"
+      />
+    </section>
+  </div>
+}
+
+@if (view() === 'create') {
+  <div class="quotation-workspace">
+    <section class="overflow-hidden bg-white">
+      <div class="flex flex-col gap-2 border-b border-slate-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p class="text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-700">Quotations</p>
+          <h1 class="text-lg font-semibold text-slate-950">Create quotation</h1>
+        </div>
+        <button type="button" class="secondary-button" (click)="backToList()">Back to list</button>
+      </div>
+
+      <div class="form-scroll space-y-3 p-4">
+        <section class="form-section">
+          <div class="section-title">
+            <h2>Quote details</h2>
+            <p>Customer and validity.</p>
+          </div>
+          <div class="section-fields">
+            <div class="grid gap-3 md:grid-cols-4">
+              <label class="field">
+                <span>Quotation no.</span>
+                <input [value]="quotation().quoteNo" (input)="updateQuotation('quoteNo', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>Quote date</span>
+                <input type="date" [value]="quotation().quoteDate" (input)="updateQuotation('quoteDate', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>Valid until</span>
+                <input type="date" [value]="quotation().validUntil" (input)="updateQuotation('validUntil', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>Phone</span>
+                <input [value]="quotation().phone" (input)="updateQuotation('phone', $any($event.target).value)" />
+              </label>
+            </div>
+            <div class="grid gap-3 md:grid-cols-2">
+              <label class="field">
+                <span>Customer name</span>
+                <input [value]="quotation().customerName" (input)="updateQuotation('customerName', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>GSTIN</span>
+                <input [value]="quotation().gstin" (input)="updateQuotation('gstin', $any($event.target).value)" />
+              </label>
+            </div>
+            <label class="field">
+              <span>Customer address</span>
+              <textarea rows="2" [value]="quotation().customerAddress" (input)="updateQuotation('customerAddress', $any($event.target).value)"></textarea>
+            </label>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <div class="section-title">
+            <h2>Products</h2>
+            <p>Items, quantity and rate.</p>
+            <button type="button" class="secondary-button mt-3" (click)="addItem()">Add item</button>
+          </div>
+          <div class="section-fields">
+            @for (item of items(); track $index) {
+              <div class="item-row">
+                <label class="field item-description">
+                  <span>Description</span>
+                  <input [value]="item.description" (input)="updateItem($index, 'description', $any($event.target).value)" />
+                </label>
+                <label class="field">
+                  <span>Qty</span>
+                  <input type="number" [value]="item.quantity" (input)="updateItem($index, 'quantity', $any($event.target).value)" />
+                </label>
+                <label class="field">
+                  <span>Rate</span>
+                  <input type="number" [value]="item.rate" (input)="updateItem($index, 'rate', $any($event.target).value)" />
+                </label>
+                <label class="field">
+                  <span>Per</span>
+                  <input [value]="item.per" (input)="updateItem($index, 'per', $any($event.target).value)" />
+                </label>
+                <button type="button" class="danger-button" (click)="removeItem($index)">Remove</button>
+              </div>
+            }
+          </div>
+        </section>
+
+        <section class="form-section">
+          <div class="section-title">
+            <h2>Terms</h2>
+            <p>Tax, delivery and payment.</p>
+          </div>
+          <div class="section-fields">
+            <div class="grid gap-3 md:grid-cols-4">
+              <label class="field">
+                <span>CGST %</span>
+                <input type="number" [value]="quotation().cgstRate" (input)="updateNumber('cgstRate', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>SGST %</span>
+                <input type="number" [value]="quotation().sgstRate" (input)="updateNumber('sgstRate', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>Payment terms</span>
+                <input [value]="quotation().paymentTerms" (input)="updateQuotation('paymentTerms', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>Delivery terms</span>
+                <input [value]="quotation().deliveryTerms" (input)="updateQuotation('deliveryTerms', $any($event.target).value)" />
+              </label>
+            </div>
+            <label class="field">
+              <span>Notes</span>
+              <textarea rows="2" [value]="quotation().notes" (input)="updateQuotation('notes', $any($event.target).value)"></textarea>
+            </label>
+          </div>
+        </section>
+      </div>
+
+      <div class="flex flex-col gap-2 border-t border-slate-200 bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Grand total</p>
+          <p class="text-lg font-bold text-slate-950">{{ formatCurrency(grandTotal()) }}</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" class="secondary-button" (click)="openPreview()">Preview</button>
+          <button type="button" class="primary-button" (click)="backToList()">Save quotation</button>
+        </div>
+      </div>
+    </section>
+  </div>
+}
+
+@if (previewOpen()) {
+  <div class="preview-overlay" role="dialog" aria-modal="true" aria-label="Quotation preview">
+    <div class="preview-panel">
+      <div class="preview-toolbar">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.12em] text-sky-700">Preview</p>
+          <h2 class="text-lg font-semibold text-slate-950">{{ quotation().quoteNo }}</h2>
+        </div>
+        <button type="button" class="secondary-button" (click)="closePreview()">Close</button>
+      </div>
+
+      <section class="quote-sheet">
+        <header class="quote-top">
+          <div>
+            <p>RBS Chemical</p>
+            <small>No. 172, Thiruchendur Main Road, Sonaganvillai, Thoothukudi Dist - 628 201.</small>
+          </div>
+          <strong>QUOTATION</strong>
+        </header>
+
+        <section class="quote-meta">
+          <div>
+            <span>To</span>
+            <p>{{ quotation().customerName }}</p>
+            <small>{{ quotation().customerAddress }}</small>
+          </div>
+          <div class="quote-info">
+            <p><span>Quotation No.</span><strong>{{ quotation().quoteNo }}</strong></p>
+            <p><span>Date</span><strong>{{ quotation().quoteDate }}</strong></p>
+            <p><span>Valid Until</span><strong>{{ quotation().validUntil }}</strong></p>
+            <p><span>GSTIN</span><strong>{{ quotation().gstin || '-' }}</strong></p>
+          </div>
+        </section>
+
+        <table class="quote-table">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Qty</th>
+              <th>Rate</th>
+              <th>Per</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of items(); track $index) {
+              <tr>
+                <td>{{ item.description }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ formatCurrency(item.rate) }}</td>
+                <td>{{ item.per }}</td>
+                <td>{{ formatCurrency(item.quantity * item.rate) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+
+        <section class="quote-total">
+          <p><span>Subtotal</span><strong>{{ formatCurrency(subTotal()) }}</strong></p>
+          <p><span>CGST {{ quotation().cgstRate }}%</span><strong>{{ formatCurrency(cgstAmount()) }}</strong></p>
+          <p><span>SGST {{ quotation().sgstRate }}%</span><strong>{{ formatCurrency(sgstAmount()) }}</strong></p>
+          <p class="grand"><span>Grand Total</span><strong>{{ formatCurrency(grandTotal()) }}</strong></p>
+        </section>
+
+        <footer class="quote-terms">
+          <p><strong>Payment:</strong> {{ quotation().paymentTerms }}</p>
+          <p><strong>Delivery:</strong> {{ quotation().deliveryTerms }}</p>
+          <p><strong>Notes:</strong> {{ quotation().notes }}</p>
+        </footer>
+      </section>
+    </div>
+  </div>
+}

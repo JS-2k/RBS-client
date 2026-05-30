@@ -1,0 +1,31 @@
+<div class="data-grid">
+  <div class="data-grid-head" [style.grid-template-columns]="gridTemplate()">
+    @for (column of columns; track column.key) {
+      <span [class.text-right]="column.align === 'right'">{{ column.label }}</span>
+    }
+  </div>
+
+  @for (row of rows; track $index) {
+    <button
+      type="button"
+      class="data-grid-row"
+      [style.grid-template-columns]="gridTemplate()"
+      (click)="rowSelected.emit(row)"
+    >
+      @for (column of columns; track column.key) {
+        <span [class.text-right]="column.align === 'right'" [class.font-semibold]="column.align === 'right'">
+          @if (column.type === 'badge') {
+            <mark [class]="badgeClass(row, column)">{{ displayValue(row, column) }}</mark>
+          } @else {
+            <span class="primary-value" [class.is-bold]="column.bold">{{ displayValue(row, column) }}</span>
+            @if (secondaryText(row, column)) {
+              <small>{{ secondaryText(row, column) }}</small>
+            }
+          }
+        </span>
+      }
+    </button>
+  } @empty {
+    <div class="data-grid-empty">{{ emptyText }}</div>
+  }
+</div>

@@ -1,5 +1,7 @@
 import { Component, computed, signal } from '@angular/core';
 
+import { DataGrid, DataGridColumn } from '../../../../shared/ui/data-grid/data-grid';
+
 type InvoiceItem = {
   description: string;
   quantity: number;
@@ -42,6 +44,7 @@ type InvoiceRow = {
 @Component({
   selector: 'app-invoice-create',
   standalone: true,
+  imports: [DataGrid],
   templateUrl: './invoice-create.html',
   styleUrl: './invoice-create.css',
 })
@@ -129,6 +132,19 @@ export class InvoiceCreate {
   ];
   protected readonly cityOptions = ['All', ...new Set(this.invoiceRows.map((invoice) => invoice.city))];
   protected readonly statusOptions = ['All', 'Paid', 'Pending', 'Overdue'];
+  protected readonly invoiceColumns: DataGridColumn[] = [
+    { key: 'invoiceNo', label: 'Invoice', width: '120px', bold: true, secondary: [{ key: 'date' }] },
+    { key: 'customer', label: 'Customer', width: 'minmax(220px, 1fr)', bold: true },
+    { key: 'city', label: 'City', width: '150px' },
+    {
+      key: 'status',
+      label: 'Status',
+      type: 'badge',
+      width: '130px',
+      badgeColors: { Paid: 'green', Pending: 'blue', Overdue: 'red' },
+    },
+    { key: 'amount', label: 'Amount', type: 'currency', align: 'right', width: '140px' },
+  ];
   protected readonly filteredInvoices = computed(() => {
     const query = this.search().trim().toLowerCase();
     const status = this.statusFilter();

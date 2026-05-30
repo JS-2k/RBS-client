@@ -1,0 +1,30 @@
+<div class="statement-workspace">
+  <section class="bg-white">
+    <div class="border-b border-slate-200 px-4 py-3">
+      <p class="text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-700">Statement</p>
+      <h1 class="text-lg font-semibold text-slate-950">Statement</h1>
+    </div>
+
+    <div class="statement-panel">
+      <label class="field">
+        <span>From date</span>
+        <input type="date" [value]="fromDate()" (input)="updateFromDate($event)" />
+      </label>
+
+      <label class="field">
+        <span>To date</span>
+        <input type="date" [value]="toDate()" (input)="updateToDate($event)" />
+      </label>
+
+      <label class="field">
+        <span>Format</span>
+        <select [value]="format()" (change)="updateFormat($event)">
+          <option value="PDF">PDF</option>
+          <option value="Excel">Excel</option>
+        </select>
+      </label>
+
+      <button type="button" class="primary-button" (click)="viewStatement()">View</button>
+    </div>
+  </section>
+</div>

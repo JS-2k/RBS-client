@@ -1,0 +1,59 @@
+<div class="dashboard-workspace">
+  <section class="border-b border-slate-200 bg-white px-4 py-3">
+    <p class="text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-700">Dashboard</p>
+    <h1 class="text-lg font-semibold text-slate-950">Business dashboard</h1>
+  </section>
+
+  <section class="grid gap-3 p-4 md:grid-cols-4">
+    @for (metric of metrics; track metric.label) {
+      <article class="metric-card">
+        <p>{{ metric.label }}</p>
+        <strong>{{ metric.value }}</strong>
+        <span>{{ metric.note }}</span>
+      </article>
+    }
+  </section>
+
+  <section class="grid gap-3 px-4 pb-4 xl:grid-cols-[1fr_360px]">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Sales overview</h2>
+        <span>Current month</span>
+      </div>
+      <div class="bar-chart">
+        @for (
+          item of [
+            { label: 'W1', value: 42 },
+            { label: 'W2', value: 68 },
+            { label: 'W3', value: 54 },
+            { label: 'W4', value: 76 },
+          ];
+          track item.label
+        ) {
+          <div>
+            <span [style.height.%]="item.value"></span>
+            <small>{{ item.label }}</small>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Attention</h2>
+        <span>Today</span>
+      </div>
+      <div class="activity-list">
+        @for (item of activities; track item.label) {
+          <article>
+            <div>
+              <strong>{{ item.label }}</strong>
+              <span>{{ item.value }}</span>
+            </div>
+            <mark>{{ item.status }}</mark>
+          </article>
+        }
+      </div>
+    </div>
+  </section>
+</div>

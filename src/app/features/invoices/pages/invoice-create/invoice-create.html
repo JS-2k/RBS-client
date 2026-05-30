@@ -37,32 +37,12 @@
         </label>
       </div>
 
-      <div class="invoice-grid">
-        <div class="invoice-grid-head">
-          <span>Invoice</span>
-          <span>Customer</span>
-          <span>City</span>
-          <span>Status</span>
-          <span class="text-right">Amount</span>
-        </div>
-
-        @for (invoiceRow of filteredInvoices(); track invoiceRow.invoiceNo) {
-          <button type="button" class="invoice-grid-row" (click)="openCreate()">
-            <span>
-              <strong>{{ invoiceRow.invoiceNo }}</strong>
-              <small>{{ invoiceRow.date }}</small>
-            </span>
-            <span>{{ invoiceRow.customer }}</span>
-            <span>{{ invoiceRow.city }}</span>
-            <span>
-              <mark [class]="invoiceRow.status.toLowerCase()">{{ invoiceRow.status }}</mark>
-            </span>
-            <span class="text-right font-semibold">{{ formatCurrency(invoiceRow.amount) }}</span>
-          </button>
-        } @empty {
-          <div class="p-8 text-center text-sm text-slate-400">No invoices found.</div>
-        }
-      </div>
+      <app-data-grid
+        [columns]="invoiceColumns"
+        [rows]="filteredInvoices()"
+        emptyText="No invoices found."
+        (rowSelected)="openCreate()"
+      />
     </section>
   </div>
 }

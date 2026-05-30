@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import {
   LucideChartNoAxesColumn,
+  LucideClock3,
+  LucideLayoutDashboard,
   LucideFlaskConical,
   LucideLogOut,
   LucideMapPinned,
@@ -25,6 +27,8 @@ type MenuItem = {
     RouterLinkActive,
     RouterOutlet,
     LucideChartNoAxesColumn,
+    LucideClock3,
+    LucideLayoutDashboard,
     LucideFlaskConical,
     LucideLogOut,
     LucideMapPinned,
@@ -39,13 +43,15 @@ type MenuItem = {
 })
 export class AppShell {
   protected readonly menuItems: MenuItem[] = [
+    { label: 'Dashboard', path: '/app/dashboard', icon: 'dashboard' },
     { label: 'Customers', path: '/app/customers', icon: 'customers' },
-    { label: 'Region', path: '/app/regions', icon: 'regions' },
-    { label: 'Invoices', path: '/app/invoices', icon: 'invoices' },
-    { label: 'Quotations', path: '/app/quotations', icon: 'quotations' },
     { label: 'Products', path: '/app/products', icon: 'products' },
+    { label: 'Quotations', path: '/app/quotations', icon: 'quotations' },
+    { label: 'Invoices', path: '/app/invoices', icon: 'invoices' },
     { label: 'Payments', path: '/app/payments', icon: 'payments' },
-    { label: 'Reports', path: '/app/reports', icon: 'reports' },
+    { label: 'Audit Log', path: '/app/audit-log', icon: 'audit-log' },
+    { label: 'Statement', path: '/app/statements', icon: 'reports' },
+    { label: 'Region', path: '/app/regions', icon: 'regions' },
     { label: 'Ask AI', path: '/app/ask-ai', icon: 'ask-ai' },
   ];
 }

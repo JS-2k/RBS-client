@@ -39,8 +39,8 @@ body {
 
 @media print {
   @page {
-    size: A4 landscape;
-    margin: 5mm;
+    size: A4 portrait;
+    margin: 8mm;
   }
 
   body.invoice-printing app-root {
@@ -54,7 +54,7 @@ body {
   body.invoice-printing #invoice-print-copy {
     position: fixed;
     inset: 1mm auto auto 1mm;
-    width: calc(297mm - 12mm);
+    width: calc(210mm - 18mm);
     box-sizing: border-box;
     break-after: avoid;
     page-break-after: avoid;

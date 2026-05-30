@@ -1,5 +1,7 @@
 import { Component, computed, signal } from '@angular/core';
 
+import { DataGrid, DataGridColumn } from '../../../../shared/ui/data-grid/data-grid';
+
 type CustomerStatus = 'Active' | 'Hold' | 'Inactive';
 
 type CustomerRow = {
@@ -31,6 +33,7 @@ type CustomerDraft = {
 @Component({
   selector: 'app-customer-list',
   standalone: true,
+  imports: [DataGrid],
   templateUrl: './customer-list.html',
   styleUrl: './customer-list.css',
 })
@@ -98,6 +101,32 @@ export class CustomerList {
   ];
   protected readonly cityOptions = ['All', ...new Set(this.customers.map((customer) => customer.city))];
   protected readonly statusOptions = ['All', 'Active', 'Hold', 'Inactive'];
+  protected readonly customerColumns: DataGridColumn[] = [
+    { key: 'code', label: 'Code', width: '110px', bold: true },
+    {
+      key: 'name',
+      label: 'Customer',
+      width: 'minmax(220px, 1fr)',
+      bold: true,
+      secondary: [{ key: 'gstin' }],
+    },
+    { key: 'city', label: 'City', width: '140px' },
+    { key: 'phone', label: 'Phone', width: '150px' },
+    {
+      key: 'status',
+      label: 'Status',
+      type: 'badge',
+      width: '110px',
+      badgeColors: { Active: 'green', Hold: 'amber', Inactive: 'red' },
+    },
+    {
+      key: 'outstanding',
+      label: 'Outstanding',
+      type: 'currency',
+      align: 'right',
+      width: '140px',
+    },
+  ];
   protected readonly filteredCustomers = computed(() => {
     const query = this.search().trim().toLowerCase();
     const status = this.statusFilter();

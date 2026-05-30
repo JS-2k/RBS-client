@@ -62,7 +62,7 @@ export class AskAi implements AfterViewChecked {
   protected readonly messages = signal<ChatMessage[]>([
     {
       role: 'assistant',
-      text: 'Hi, I am Aira. I can help with customers, invoices, payments, products, quotations, and reports. What should we work on?',
+      text: 'Hi, I am Aira. I can help with customers, invoices, payments, products, quotations, and statements. What should we work on?',
     },
   ]);
   protected readonly isAsking = signal(false);
@@ -107,7 +107,7 @@ export class AskAi implements AfterViewChecked {
     this.messages.set([
       {
         role: 'assistant',
-        text: 'Fresh chat started. Aira is ready for customers, invoices, payments, products, quotations, or reports.',
+        text: 'Fresh chat started. Aira is ready for customers, invoices, payments, products, quotations, or statements.',
       },
     ]);
     this.prompt = '';

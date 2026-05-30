@@ -37,32 +37,12 @@
         </label>
       </div>
 
-      <div class="customer-grid">
-        <div class="customer-grid-head">
-          <span>Code</span>
-          <span>Customer</span>
-          <span>City</span>
-          <span>Phone</span>
-          <span>Status</span>
-          <span class="text-right">Outstanding</span>
-        </div>
-
-        @for (row of filteredCustomers(); track row.code) {
-          <button type="button" class="customer-grid-row" (click)="openCreate()">
-            <span class="font-semibold">{{ row.code }}</span>
-            <span>
-              <strong>{{ row.name }}</strong>
-              <small>{{ row.gstin }}</small>
-            </span>
-            <span>{{ row.city }}</span>
-            <span>{{ row.phone }}</span>
-            <span><mark [class]="row.status.toLowerCase()">{{ row.status }}</mark></span>
-            <span class="text-right font-semibold">{{ formatCurrency(row.outstanding) }}</span>
-          </button>
-        } @empty {
-          <div class="p-8 text-center text-sm text-slate-400">No customers found.</div>
-        }
-      </div>
+      <app-data-grid
+        [columns]="customerColumns"
+        [rows]="filteredCustomers()"
+        emptyText="No customers found."
+        (rowSelected)="openCreate()"
+      />
     </section>
   </div>
 }

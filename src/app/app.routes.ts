@@ -8,6 +8,7 @@ export const routes: Routes = [
   },
   {
     path: 'login',
+    title: 'RBS | Login',
     loadComponent: () =>
       import('./features/auth/pages/login/login').then((component) => component.Login),
   },
@@ -18,11 +19,20 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'customers',
+        redirectTo: 'dashboard',
         pathMatch: 'full',
       },
       {
+        path: 'dashboard',
+        title: 'RBS | Dashboard',
+        loadComponent: () =>
+          import('./features/dashboard/pages/dashboard-home/dashboard-home').then(
+            (component) => component.DashboardHome,
+          ),
+      },
+      {
         path: 'customers',
+        title: 'RBS | Customers',
         loadComponent: () =>
           import('./features/customers/pages/customer-list/customer-list').then(
             (component) => component.CustomerList,
@@ -30,6 +40,7 @@ export const routes: Routes = [
       },
       {
         path: 'regions',
+        title: 'RBS | Region',
         loadComponent: () =>
           import('./features/customers/pages/customer-outstanding/customer-outstanding').then(
             (component) => component.CustomerOutstanding,
@@ -37,6 +48,7 @@ export const routes: Routes = [
       },
       {
         path: 'invoices',
+        title: 'RBS | Invoices',
         loadComponent: () =>
           import('./features/invoices/pages/invoice-create/invoice-create').then(
             (component) => component.InvoiceCreate,
@@ -44,50 +56,52 @@ export const routes: Routes = [
       },
       {
         path: 'quotations',
+        title: 'RBS | Quotations',
         loadComponent: () =>
-          import('./features/workspace/pages/menu-page/menu-page').then(
-            (component) => component.MenuPage,
+          import('./features/quotations/pages/quotation-list/quotation-list').then(
+            (component) => component.QuotationList,
           ),
-        data: {
-          title: 'Quotations',
-          description: 'Prepare quotes and follow up on pending approvals.',
-        },
       },
       {
         path: 'products',
+        title: 'RBS | Products',
         loadComponent: () =>
-          import('./features/workspace/pages/menu-page/menu-page').then(
-            (component) => component.MenuPage,
+          import('./features/products/pages/product-list/product-list').then(
+            (component) => component.ProductList,
           ),
-        data: {
-          title: 'Products',
-          description: 'Keep product and chemical catalog information organized.',
-        },
       },
       {
         path: 'payments',
+        title: 'RBS | Payments',
         loadComponent: () =>
-          import('./features/workspace/pages/menu-page/menu-page').then(
-            (component) => component.MenuPage,
+          import('./features/payments/pages/payment-list/payment-list').then(
+            (component) => component.PaymentList,
           ),
-        data: {
-          title: 'Payments',
-          description: 'Review collections, outstanding balances, and receipts.',
-        },
+      },
+      {
+        path: 'audit-log',
+        title: 'RBS | Audit Log',
+        loadComponent: () =>
+          import('./features/audit-log/pages/audit-log-list/audit-log-list').then(
+            (component) => component.AuditLogList,
+          ),
+      },
+      {
+        path: 'statements',
+        title: 'RBS | Statement',
+        loadComponent: () =>
+          import('./features/statements/pages/statement-filter/statement-filter').then(
+            (component) => component.StatementFilter,
+          ),
       },
       {
         path: 'reports',
-        loadComponent: () =>
-          import('./features/workspace/pages/menu-page/menu-page').then(
-            (component) => component.MenuPage,
-          ),
-        data: {
-          title: 'Reports',
-          description: 'View compact summaries for daily business decisions.',
-        },
+        redirectTo: 'statements',
+        pathMatch: 'full',
       },
       {
         path: 'ask-ai',
+        title: 'RBS | Ask AI',
         loadComponent: () =>
           import('./features/ask-ai/pages/ask-ai/ask-ai').then((component) => component.AskAi),
       },

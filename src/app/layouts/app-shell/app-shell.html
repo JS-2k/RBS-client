@@ -21,6 +21,9 @@
               [class.bg-slate-50]="!activeLink.isActive"
             >
               @switch (item.icon) {
+                @case ('dashboard') {
+                  <svg lucideLayoutDashboard size="15" strokeWidth="2.2"></svg>
+                }
                 @case ('customers') {
                   <svg lucideUsers size="15" strokeWidth="2.2"></svg>
                 }
@@ -38,6 +41,9 @@
                 }
                 @case ('payments') {
                   <svg lucideWalletCards size="15" strokeWidth="2.2"></svg>
+                }
+                @case ('audit-log') {
+                  <svg lucideClock3 size="15" strokeWidth="2.2"></svg>
                 }
                 @case ('reports') {
                   <svg lucideChartNoAxesColumn size="15" strokeWidth="2.2"></svg>
@@ -83,6 +89,9 @@
               class="inline-flex shrink-0 items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold text-slate-600"
             >
               @switch (item.icon) {
+                @case ('dashboard') {
+                  <svg lucideLayoutDashboard size="13" strokeWidth="2.2"></svg>
+                }
                 @case ('customers') {
                   <svg lucideUsers size="13" strokeWidth="2.2"></svg>
                 }
@@ -100,6 +109,9 @@
                 }
                 @case ('payments') {
                   <svg lucideWalletCards size="13" strokeWidth="2.2"></svg>
+                }
+                @case ('audit-log') {
+                  <svg lucideClock3 size="13" strokeWidth="2.2"></svg>
                 }
                 @case ('reports') {
                   <svg lucideChartNoAxesColumn size="13" strokeWidth="2.2"></svg>

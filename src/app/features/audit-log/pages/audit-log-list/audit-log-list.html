@@ -1,0 +1,49 @@
+<div class="audit-workspace">
+  <section class="bg-white">
+    <div class="flex flex-col gap-2 border-b border-slate-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <p class="text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-700">Audit log</p>
+        <h1 class="text-lg font-semibold text-slate-950">Activity history</h1>
+      </div>
+      <div class="summary-pill">{{ filteredEntries().length }} events</div>
+    </div>
+
+    <div class="grid gap-2 border-b border-slate-200 bg-white px-4 py-3 lg:grid-cols-[1fr_150px_150px_150px]">
+      <label class="field">
+        <span>Search</span>
+        <input
+          type="search"
+          [value]="search()"
+          (input)="updateSearch($event)"
+          placeholder="Invoice no, user, activity"
+        />
+      </label>
+      <label class="field">
+        <span>User</span>
+        <select [value]="userFilter()" (change)="updateUserFilter($event)">
+          @for (user of userOptions; track user) {
+            <option [value]="user">{{ user }}</option>
+          }
+        </select>
+      </label>
+      <label class="field">
+        <span>Module</span>
+        <select [value]="moduleFilter()" (change)="updateModuleFilter($event)">
+          @for (module of moduleOptions; track module) {
+            <option [value]="module">{{ module }}</option>
+          }
+        </select>
+      </label>
+      <label class="field">
+        <span>Action</span>
+        <select [value]="actionFilter()" (change)="updateActionFilter($event)">
+          @for (action of actionOptions; track action) {
+            <option [value]="action">{{ action }}</option>
+          }
+        </select>
+      </label>
+    </div>
+
+    <app-data-grid [columns]="auditColumns" [rows]="filteredEntries()" emptyText="No audit events found." />
+  </section>
+</div>

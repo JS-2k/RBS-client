@@ -1,0 +1,151 @@
+@if (view() === 'list') {
+  <div class="payment-workspace">
+    <section class="bg-white">
+      <div class="flex flex-col gap-2 border-b border-slate-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p class="text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-700">Payments</p>
+          <h1 class="text-lg font-semibold text-slate-950">Collections</h1>
+        </div>
+        <button type="button" class="primary-button" (click)="openCreate()">Record payment</button>
+      </div>
+
+      <div class="grid gap-2 border-b border-slate-200 bg-white px-4 py-3 md:grid-cols-[1fr_150px_150px]">
+        <label class="field">
+          <span>Search</span>
+          <input
+            type="search"
+            [value]="search()"
+            (input)="updateSearch($event)"
+            placeholder="Receipt no, invoice no, customer"
+          />
+        </label>
+        <label class="field">
+          <span>Status</span>
+          <select [value]="statusFilter()" (change)="updateStatusFilter($event)">
+            @for (status of statusOptions; track status) {
+              <option [value]="status">{{ status }}</option>
+            }
+          </select>
+        </label>
+        <label class="field">
+          <span>Mode</span>
+          <select [value]="modeFilter()" (change)="updateModeFilter($event)">
+            @for (mode of modeOptions; track mode) {
+              <option [value]="mode">{{ mode }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      <app-data-grid
+        [columns]="paymentColumns"
+        [rows]="paymentRows()"
+        emptyText="No payments found."
+        (rowSelected)="openCreate()"
+      />
+    </section>
+  </div>
+}
+
+@if (view() === 'create') {
+  <div class="payment-workspace">
+    <section class="overflow-hidden bg-white">
+      <div class="flex flex-col gap-2 border-b border-slate-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p class="text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-700">Payments</p>
+          <h1 class="text-lg font-semibold text-slate-950">Record payment</h1>
+        </div>
+        <button type="button" class="secondary-button" (click)="backToList()">Back to list</button>
+      </div>
+
+      <div class="form-scroll space-y-3 p-4">
+        <section class="form-section">
+          <div class="section-title">
+            <h2>Receipt details</h2>
+            <p>Customer and invoice reference.</p>
+          </div>
+          <div class="section-fields">
+            <div class="grid gap-3 md:grid-cols-4">
+              <label class="field">
+                <span>Receipt no.</span>
+                <input [value]="payment().receiptNo" (input)="updatePayment('receiptNo', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>Payment date</span>
+                <input type="date" [value]="payment().date" (input)="updatePayment('date', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>Invoice no.</span>
+                <input [value]="payment().invoiceNo" (input)="updatePayment('invoiceNo', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>Mode</span>
+                <select [value]="payment().mode" (change)="updatePayment('mode', $any($event.target).value)">
+                  <option value="Cash">Cash</option>
+                  <option value="Bank">Bank</option>
+                  <option value="UPI">UPI</option>
+                  <option value="Cheque">Cheque</option>
+                </select>
+              </label>
+            </div>
+            <label class="field">
+              <span>Customer</span>
+              <input [value]="payment().customer" (input)="updatePayment('customer', $any($event.target).value)" />
+            </label>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <div class="section-title">
+            <h2>Amount</h2>
+            <p>Track partial and full collections.</p>
+          </div>
+          <div class="section-fields">
+            <div class="grid gap-3 md:grid-cols-3">
+              <label class="field">
+                <span>Invoice amount</span>
+                <input type="number" [value]="payment().invoiceAmount" (input)="updateNumber('invoiceAmount', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>Received amount</span>
+                <input type="number" [value]="payment().receivedAmount" (input)="updateNumber('receivedAmount', $any($event.target).value)" />
+              </label>
+              <label class="field readonly-field">
+                <span>Balance</span>
+                <input [value]="formatCurrency(balanceAmount())" readonly />
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <div class="section-title">
+            <h2>Reference</h2>
+            <p>Bank, UPI, cheque or cash notes.</p>
+          </div>
+          <div class="section-fields">
+            <label class="field">
+              <span>Reference no.</span>
+              <input [value]="payment().referenceNo" (input)="updatePayment('referenceNo', $any($event.target).value)" />
+            </label>
+            <label class="field">
+              <span>Remarks</span>
+              <textarea rows="3" [value]="payment().remarks" (input)="updatePayment('remarks', $any($event.target).value)"></textarea>
+            </label>
+          </div>
+        </section>
+      </div>
+
+      <div class="flex flex-col gap-2 border-t border-slate-200 bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Balance</p>
+          <p class="text-lg font-bold text-slate-950">{{ formatCurrency(balanceAmount()) }}</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" class="secondary-button" (click)="backToList()">Cancel</button>
+          <button type="button" class="primary-button" (click)="backToList()">Save payment</button>
+        </div>
+      </div>
+    </section>
+  </div>
+}

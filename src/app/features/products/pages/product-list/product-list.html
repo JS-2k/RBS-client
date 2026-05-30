@@ -1,0 +1,152 @@
+@if (view() === 'list') {
+  <div class="product-workspace">
+    <section class="bg-white">
+      <div class="flex flex-col gap-2 border-b border-slate-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p class="text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-700">Products</p>
+          <h1 class="text-lg font-semibold text-slate-950">Product list</h1>
+        </div>
+        <button type="button" class="primary-button" (click)="openCreate()">Create product</button>
+      </div>
+
+      <div class="grid gap-2 border-b border-slate-200 bg-white px-4 py-3 md:grid-cols-[1fr_160px_150px]">
+        <label class="field">
+          <span>Search</span>
+          <input
+            type="search"
+            [value]="search()"
+            (input)="updateSearch($event)"
+            placeholder="Product code, name, HSN"
+          />
+        </label>
+        <label class="field">
+          <span>Category</span>
+          <select [value]="categoryFilter()" (change)="updateCategoryFilter($event)">
+            @for (category of categoryOptions; track category) {
+              <option [value]="category">{{ category }}</option>
+            }
+          </select>
+        </label>
+        <label class="field">
+          <span>Status</span>
+          <select [value]="statusFilter()" (change)="updateStatusFilter($event)">
+            @for (status of statusOptions; track status) {
+              <option [value]="status">{{ status }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      <app-data-grid
+        [columns]="productColumns"
+        [rows]="filteredProducts()"
+        emptyText="No products found."
+        (rowSelected)="openCreate()"
+      />
+    </section>
+  </div>
+}
+
+@if (view() === 'create') {
+  <div class="product-workspace">
+    <section class="overflow-hidden bg-white">
+      <div class="flex flex-col gap-2 border-b border-slate-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p class="text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-700">Products</p>
+          <h1 class="text-lg font-semibold text-slate-950">Create product</h1>
+        </div>
+        <button type="button" class="secondary-button" (click)="backToList()">Back to list</button>
+      </div>
+
+      <div class="form-scroll space-y-3 p-4">
+        <section class="form-section">
+          <div class="section-title">
+            <h2>Product details</h2>
+            <p>Code, product name and HSN.</p>
+          </div>
+          <div class="section-fields">
+            <div class="grid gap-3 md:grid-cols-4">
+              <label class="field">
+                <span>Product code</span>
+                <input [value]="product().code" (input)="updateProduct('code', $any($event.target).value)" />
+              </label>
+              <label class="field md:col-span-2">
+                <span>Product name</span>
+                <input [value]="product().name" (input)="updateProduct('name', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>HSN code</span>
+                <input [value]="product().hsn" (input)="updateProduct('hsn', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>Category</span>
+                <input [value]="product().category" (input)="updateProduct('category', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>Unit</span>
+                <input [value]="product().unit" (input)="updateProduct('unit', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>Status</span>
+                <select [value]="product().status" (change)="updateProduct('status', $any($event.target).value)">
+                  <option value="Active">Active</option>
+                  <option value="Low stock">Low stock</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Tax %</span>
+                <input type="number" [value]="product().taxRate" (input)="updateNumber('taxRate', $any($event.target).value)" />
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <div class="section-title">
+            <h2>Pricing and stock</h2>
+            <p>Selling rate and inventory level.</p>
+          </div>
+          <div class="section-fields">
+            <div class="grid gap-3 md:grid-cols-3">
+              <label class="field">
+                <span>Rate</span>
+                <input type="number" [value]="product().rate" (input)="updateNumber('rate', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>Current stock</span>
+                <input type="number" [value]="product().stock" (input)="updateNumber('stock', $any($event.target).value)" />
+              </label>
+              <label class="field">
+                <span>Reorder level</span>
+                <input type="number" [value]="product().reorderLevel" (input)="updateNumber('reorderLevel', $any($event.target).value)" />
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <div class="section-title">
+            <h2>Supplier and notes</h2>
+            <p>Source and internal description.</p>
+          </div>
+          <div class="section-fields">
+            <label class="field">
+              <span>Supplier</span>
+              <input [value]="product().supplier" (input)="updateProduct('supplier', $any($event.target).value)" />
+            </label>
+            <label class="field">
+              <span>Description</span>
+              <textarea rows="3" [value]="product().description" (input)="updateProduct('description', $any($event.target).value)"></textarea>
+            </label>
+          </div>
+        </section>
+      </div>
+
+      <div class="flex justify-end gap-2 border-t border-slate-200 bg-white px-4 py-3">
+        <button type="button" class="secondary-button" (click)="backToList()">Cancel</button>
+        <button type="button" class="primary-button" (click)="backToList()">Save product</button>
+      </div>
+    </section>
+  </div>
+}

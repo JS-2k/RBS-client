@@ -559,12 +559,12 @@
     width: 100%;
     max-width: none;
     border-radius: 6px;
-    font-size: 8.5px;
+    font-size: 11.5px;
   }
 
   .top-line strong {
-    padding: 3px 20px;
-    font-size: 13px;
+    padding: 4px 22px;
+    font-size: 15px;
   }
 
   .top-line span,
@@ -574,42 +574,42 @@
   .total-box strong,
   .words-box span,
   .words-box strong {
-    padding: 3px 6px;
+    padding: 5px 7px;
   }
 
   .brand-line {
-    grid-template-columns: 76px 1fr;
-    padding: 4px 10px;
+    grid-template-columns: 86px 1fr;
+    padding: 7px 12px;
   }
 
   .brand-line img {
-    width: 72px;
+    width: 82px;
   }
 
   .brand-line h2 {
-    font-size: 18px;
+    font-size: 24px;
   }
 
   .brand-line p,
   .bill-box p {
-    font-size: 8.5px;
+    font-size: 11px;
   }
 
   .invoice-meta {
-    grid-template-columns: 1fr 300px;
+    grid-template-columns: 1fr 250px;
   }
 
   .bill-box,
   .bank-box {
     min-height: 0;
-    padding: 5px 7px;
+    padding: 7px 8px;
     border-right: 2px solid #1e293b;
   }
 
   .meta-grid div,
   .total-box p {
-    min-height: 20px;
-    padding: 3px 6px;
+    min-height: 26px;
+    padding: 4px 7px;
   }
 
   .meta-grid span,
@@ -617,27 +617,27 @@
   .meta-grid strong,
   .bank-box h3,
   .product-table th {
-    font-size: 8px;
+    font-size: 10px;
   }
 
   .product-table tbody tr {
-    height: 24px;
+    height: 30px;
   }
 
   .invoice-bottom {
-    grid-template-columns: 1fr 280px;
+    grid-template-columns: 1fr 245px;
   }
 
   .sign-row {
-    min-height: 40px;
+    min-height: 58px;
   }
 
   .sign-row div,
   .terms-box {
-    padding: 4px 7px;
+    padding: 6px 8px;
   }
 
   .terms-box {
-    font-size: 7px;
+    font-size: 9px;
   }
 }
